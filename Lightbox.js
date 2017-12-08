@@ -62,7 +62,7 @@ export default class Lightbox extends Component {
     backgroundColor: this.props.backgroundColor,
     children: this.getContent(),
     didOpen: this.props.didOpen,
-    willClose: this.props.willClose,
+    willClose: this.willClose,
     onClose: this.onClose,
   })
 
@@ -105,8 +105,20 @@ export default class Lightbox extends Component {
     throw new Error('Lightbox.close method is deprecated. Use renderHeader(close) prop instead.')
   }
 
+  willClose = () => {
+    Animated.timing(
+      this.state.layoutOpacity, 
+      {
+        toValue: 1, 
+        duration: 250
+      }
+    ).start()
+
+    this.props.willClose()
+  }
+
   onClose = () => {
-    this.state.layoutOpacity.setValue(1);
+//    this.state.layoutOpacity.setValue(1);
     this.setState({
       isOpen: false,
     }, this.props.onClose);
